@@ -8,13 +8,15 @@ import com.udacity.stockhawk.R;
 
 public class StockHistoryActivity extends Activity {
 
+    private String mHistoryString;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stock_history);
 
+        mHistoryString=getIntent().getStringExtra(getString(R.string.stock_history_extra));
         TextView textView=(TextView)findViewById(R.id.history_text);
-        textView.setText(getIntent().getStringExtra(getString(R.string.stock_history_extra)));
+        textView.setText(mHistoryString);
     }
 
 }
