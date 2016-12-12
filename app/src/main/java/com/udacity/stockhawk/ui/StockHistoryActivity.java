@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -14,6 +15,7 @@ import com.udacity.stockhawk.R;
 
 import java.security.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -63,6 +65,8 @@ public class StockHistoryActivity extends Activity {
         lineDataSets.add(lineDataSet2);
 
         mLineChart.setData(new LineData(lineDataSets));
+        mLineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        mLineChart.setAutoScaleMinMaxEnabled(true);
 
         mLineChart.setVisibleXRangeMaximum(65f);
 
@@ -73,17 +77,27 @@ public class StockHistoryActivity extends Activity {
     private void convertHistoryTextIntoMapWithCorrectTimeFormat(){
 
         String[] splited=mHistoryString.split("\n");
+
         float count=0;
-        for(String s : splited)
+        // preprocess the time data
+
+        long minTime=Long.parseLong(splited[splited.length-1].split(",")[0].trim())>>29;
+        for(int i=splited.length-1; i>=0; i--)
         {
-            String[] parts=s.split(",");
+            String[] parts=splited[i].split(",");
 
 
-            xAxes.add(Float.toString(count));
-            yAxes.add(new Entry(count,Float.parseFloat(parts[1].trim())));
-            count+=1;
+            //xAxes.add(Float.toString(count*1000));
+            //xAxes.add(parts[0].trim())
+            //yAxes.add(new Entry(Long.parseLong(parts[0].trim())>>29,Float.parseFloat(parts[1].trim())));
+            yAxes.add(new Entry(count/2,Float.parseFloat(parts[1].trim())));
+            count++;
+
+
 
         }
+
+
 
 
     }
