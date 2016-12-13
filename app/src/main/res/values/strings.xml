@@ -37,5 +37,7 @@
     <string name="toast_stock_added_no_connectivity">Symbol %s added. Will refresh when network available.</string>
     <string name="toast_no_connectivity">Will refresh when network available.</string>
     <string name="title_activity_stock_history">StockHistoryActivity</string>
+    <string name="add_stock_success">Your last add is successful</string>
+    <string name="add_stock_fail">Your last add is not successful. Please check your stock symbol.</string>
 
 </resources>

@@ -6,6 +6,8 @@ import timber.log.Timber;
 
 public class StockHawkApp extends Application {
 
+    public static boolean FLAG=false;
+
     @Override
     public void onCreate() {
         super.onCreate();

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.udacity.stockhawk.StockHawkApp;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
 
@@ -63,6 +64,7 @@ public final class QuoteSyncJob {
             Timber.d(quotes.toString());
 
             ArrayList<ContentValues> quoteCVs = new ArrayList<>();
+            int count=0;
 
             while (iterator.hasNext()) {
                 String symbol = iterator.next();
@@ -70,6 +72,13 @@ public final class QuoteSyncJob {
 
                 Stock stock = quotes.get(symbol);
                 StockQuote quote = stock.getQuote();
+
+                if(quote.getPrice()==null){
+                    count++;
+                    PrefUtils.removeStock(context,symbol);
+
+                    break;
+                }
 
                 float price = quote.getPrice().floatValue();
                 float change = quote.getChange().floatValue();
@@ -108,6 +117,12 @@ public final class QuoteSyncJob {
 
             Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED);
             context.sendBroadcast(dataUpdatedIntent);
+            if(count!=0){
+                StockHawkApp.FLAG=false;
+            }
+            else{
+                StockHawkApp.FLAG=true;
+            }
 
         } catch (IOException exception) {
             Timber.e(exception, "Error fetching stock quotes");

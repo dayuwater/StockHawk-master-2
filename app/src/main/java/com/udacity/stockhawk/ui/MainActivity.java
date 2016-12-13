@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
 import com.udacity.stockhawk.R;
+import com.udacity.stockhawk.StockHawkApp;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
 import com.udacity.stockhawk.sync.QuoteSyncJob;
@@ -133,6 +134,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             PrefUtils.addStock(this, symbol);
             QuoteSyncJob.syncImmediately(this);
+
+            if(StockHawkApp.FLAG)
+                Toast.makeText(this, R.string.add_stock_success,Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(this, R.string.add_stock_fail,Toast.LENGTH_LONG).show();
+
+
         }
     }
 
