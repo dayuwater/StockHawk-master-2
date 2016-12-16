@@ -82,6 +82,7 @@ public class DetailWidgetRemoteViewsService extends RemoteViewsService {
                 return data == null ? 0 : data.getCount();
             }
 
+            @TargetApi(Build.VERSION_CODES.M)
             @Override
             public RemoteViews getViewAt(int position) {
                 if (position == AdapterView.INVALID_POSITION ||
@@ -95,6 +96,7 @@ public class DetailWidgetRemoteViewsService extends RemoteViewsService {
                 double price = data.getDouble(data.getColumnIndex(Quote.COLUMN_PRICE));
                 double change=data.getDouble(data.getColumnIndex(Quote.COLUMN_ABSOLUTE_CHANGE));
                 double percentageChange=data.getDouble(data.getColumnIndex(Quote.COLUMN_PERCENTAGE_CHANGE));
+                String history=data.getString(data.getColumnIndex(Quote.COLUMN_HISTORY));
 
                 dollarFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.US);
                 dollarFormatWithPlus = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.US);
@@ -108,14 +110,26 @@ public class DetailWidgetRemoteViewsService extends RemoteViewsService {
                 String percentage = percentageFormat.format(percentageChange / 100);
                 String priceInFormat=dollarFormat.format(price);
 
+                // set the background color of the change block in the widget
+                if(percentageChange>0){
+                    views.setTextColor(R.id.widget_change,getColor(R.color.material_green_700));
+
+                }
+                else{
+                    views.setTextColor(R.id.widget_change,getColor(R.color.material_red_700));
+
+                }
+
                 views.setTextViewText(R.id.widget_change,percentage);
                 views.setTextViewText(R.id.widget_bid_price,priceInFormat);
                 views.setTextViewText(R.id.widget_stock_symbol,stockName);
 
+
+
                 final Intent fillInIntent = new Intent();
                 // TODO: Put real Uri into intent
 
-                fillInIntent.putExtra("Stock",stockName);
+                fillInIntent.putExtra(getString(R.string.stock_history_extra),history);
                 views.setOnClickFillInIntent(R.id.widget_list_item, fillInIntent);
                 return views;
             }
