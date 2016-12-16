@@ -22,7 +22,9 @@ import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.ui.StockHistoryActivity;
 
 
-
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -30,6 +32,10 @@ import java.util.concurrent.ExecutionException;
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class DetailWidgetRemoteViewsService extends RemoteViewsService {
+
+    private DecimalFormat dollarFormatWithPlus=new DecimalFormat();
+    private DecimalFormat dollarFormat=new DecimalFormat();
+    private DecimalFormat percentageFormat=new DecimalFormat();
     public final String LOG_TAG = DetailWidgetRemoteViewsService.class.getSimpleName();
 
     @Override
@@ -88,9 +94,22 @@ public class DetailWidgetRemoteViewsService extends RemoteViewsService {
                 String stockName = data.getString(data.getColumnIndex(Quote.COLUMN_SYMBOL));
                 double price = data.getDouble(data.getColumnIndex(Quote.COLUMN_PRICE));
                 double change=data.getDouble(data.getColumnIndex(Quote.COLUMN_ABSOLUTE_CHANGE));
+                double percentageChange=data.getDouble(data.getColumnIndex(Quote.COLUMN_PERCENTAGE_CHANGE));
 
-                views.setTextViewText(R.id.widget_change,Double.toString(change));
-                views.setTextViewText(R.id.widget_bid_price,Double.toString(price));
+                dollarFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.US);
+                dollarFormatWithPlus = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.US);
+                dollarFormatWithPlus.setPositivePrefix("+$");
+                percentageFormat = (DecimalFormat) NumberFormat.getPercentInstance(Locale.getDefault());
+                percentageFormat.setMaximumFractionDigits(2);
+                percentageFormat.setMinimumFractionDigits(2);
+                percentageFormat.setPositivePrefix("+");
+
+                String changeInFormat = dollarFormatWithPlus.format(change);
+                String percentage = percentageFormat.format(percentageChange / 100);
+                String priceInFormat=dollarFormat.format(price);
+
+                views.setTextViewText(R.id.widget_change,percentage);
+                views.setTextViewText(R.id.widget_bid_price,priceInFormat);
                 views.setTextViewText(R.id.widget_stock_symbol,stockName);
 
                 final Intent fillInIntent = new Intent();
