@@ -56,7 +56,7 @@ public class StockHistoryActivity extends Activity {
 
 
 
-        LineDataSet lineDataSet2 = new LineDataSet(yAxes,"stock price");
+        LineDataSet lineDataSet2 = new LineDataSet(yAxes,getString(R.string.line_chart_y_label));
         lineDataSet2.setDrawCircles(false);
         lineDataSet2.setColor(Color.RED);
 
