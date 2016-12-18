@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         }).attachToRecyclerView(recyclerView);
 
-        Stetho.initializeWithDefaults(this);
+
 
 
 
@@ -105,14 +105,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             swipeRefreshLayout.setRefreshing(false);
             error.setText(getString(R.string.error_no_network));
             error.setVisibility(View.VISIBLE);
+            error.setContentDescription(getString(R.string.error_no_network));
         } else if (!networkUp()) {
             swipeRefreshLayout.setRefreshing(false);
             Toast.makeText(this, R.string.toast_no_connectivity, Toast.LENGTH_LONG).show();
+            swipeRefreshLayout.setContentDescription(getString(R.string.toast_no_connectivity));
+
         } else if (PrefUtils.getStocks(this).size() == 0) {
             Timber.d("WHYAREWEHERE");
             swipeRefreshLayout.setRefreshing(false);
             error.setText(getString(R.string.error_no_stocks));
             error.setVisibility(View.VISIBLE);
+            error.setContentDescription(getString(R.string.error_no_stocks));
         } else {
             error.setVisibility(View.GONE);
         }
@@ -135,10 +139,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             PrefUtils.addStock(this, symbol);
             QuoteSyncJob.syncImmediately(this);
 
-            if(StockHawkApp.FLAG)
-                Toast.makeText(this, R.string.add_stock_success,Toast.LENGTH_LONG).show();
-            else
-                Toast.makeText(this, R.string.add_stock_fail,Toast.LENGTH_LONG).show();
+//            if(StockHawkApp.FLAG)
+//                Toast.makeText(this, R.string.add_stock_success,Toast.LENGTH_LONG).show();
+//            else
+//                Toast.makeText(this, R.string.add_stock_fail,Toast.LENGTH_LONG).show();
 
 
         }
@@ -185,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         getMenuInflater().inflate(R.menu.main_activity_settings, menu);
         MenuItem item = menu.findItem(R.id.action_change_units);
         setDisplayModeMenuItemIcon(item);
+
         return true;
     }
 
